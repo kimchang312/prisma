@@ -32,7 +32,7 @@ export const needSignin = async (req, res, next) => {
 
     const decodedPayload = jwt.verify(accessToken, JWT_ACCESS_TOKEN_SECRET);
     const { id } = decodedPayload;
-    // 일치 하는 userId가 없는 경우
+    
     const user = (await prisma.users.findUnique({
         where: { id: +id },
       }));
@@ -48,7 +48,7 @@ export const needSignin = async (req, res, next) => {
 
     next();
   } catch (error) {
-    // 검증에 실패한 경우
+    
     console.error(error);
 
     let statusCode = 500;

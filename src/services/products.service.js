@@ -58,9 +58,7 @@ export class ProductsService {
   updateProduct = async (productId,title, description, status) => {
     
     const updatedProduct=await this.productsRepository.updateProduct(productId,title, description, status);
-    
-    //const updatedProduct = await this.productsRepository.findProductById(productId);
-    
+  
     return {
       title: updatedProduct.title,
       description: updatedProduct.description,
