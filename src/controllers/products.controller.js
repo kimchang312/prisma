@@ -19,7 +19,7 @@ export class ProductsController{
     getProductById =async(req,res,next)=>{
       try{
         const {productId}=req.params;
-        const product = await this.productsService.findeProductById(productId);
+        const product = await this.productsService.findProductById(productId);
         if (!product) {
           return res.status(404).json({
             success: false,
@@ -39,9 +39,9 @@ export class ProductsController{
 
     createProduct =async(req,res,next)=>{
       try{
-        const { id: userId, name: userName } = res.locals.user;
+        const { id: userId, name: userName } = req.user;
         const { title, description } = req.body;
-
+       
         if (!title) {
           return res.status(400).json({
             success: false,
@@ -55,7 +55,7 @@ export class ProductsController{
             message: '설명 입력이 필요합니다.',
           });
         }
-    
+  
         const createdProduct = await this.productsService.createProduct(
           title,
           description,
@@ -73,9 +73,10 @@ export class ProductsController{
 
     updateProduct = async(req,res,next)=>{
       try{
+      
         const {productId}=req.params;
         const { title, description, status } = req.body;
-        const { id: userId, name: userName } = res.locals.user;
+        const { id: userId, name: userName } = req.user;
    
         if (!title && !description && !status) {
       return res.status(400).json({
@@ -95,7 +96,7 @@ export class ProductsController{
       });
     }
 
-    const product = await Products.findByPk(productId);
+    const product = await this.productsService.findProductById(productId);
 
     if (!product) {
       return res.status(404).json({
@@ -118,6 +119,7 @@ export class ProductsController{
           description,
           status,
         );
+        
           return res.status(200).json({
           success: true,
           message: '상품 수정에 성공했습니다.',
@@ -131,9 +133,10 @@ export class ProductsController{
     deleteProduct=async(req,res,next)=>{
       try {
         const {productId}=req.params;
-        const { id: userId, name: userName } = res.locals.user;
+        const { id: userId, name: userName } = req.user;
 
-        const product = await Products.findByPk(productId);
+        const product = await this.productsService.findProductById(productId);
+
         if (!product) {
           return res.status(404).json({
             success: false,

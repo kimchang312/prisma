@@ -4,11 +4,11 @@ import bcrpt from "bcrypt";
 
 export class AuthRepository{
 
-    signupUser=async( email,hashedPassword,name)=>{
+    signupUser=async( email,password,hashedPassword,name)=>{
         const userEmail= await prisma.users.findFirst({
             where:{email:email},
         });
-
+       
         if(userEmail){
             return false;
         }
@@ -16,11 +16,11 @@ export class AuthRepository{
         const newUser= await prisma.users.create({
             data:{
                 email,
-                hashedPassword,
+                password: hashedPassword,
                 name,
             },
         });
-
+       
         return newUser;
     }
 
@@ -28,7 +28,8 @@ export class AuthRepository{
         const user= await prisma.users.findFirst({
             where:{email:email},
         });
-       const result= await bcrpt.compareSync(password, user.hashedPassword)
+       const result= await bcrpt.compareSync(password, user.password)
+      
        if(!result){
         return false;
        }

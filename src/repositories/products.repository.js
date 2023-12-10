@@ -4,7 +4,17 @@ import { prisma } from '../utils/prisma/index.js';
 export class ProductsRepository {
   findAllProducts = async () => {
 
-    const products = await prisma.products.findMany();
+    const products = await prisma.products.findMany({
+      select: {
+        id: true,
+        title: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
 
     return products;
   };
@@ -12,7 +22,7 @@ export class ProductsRepository {
   findProductById = async (productId) => {
  
     const product = await prisma.products.findUnique({
-      where: { productId: +productId },
+      where: { id: +productId },
     });
 
     return product;
@@ -24,14 +34,14 @@ export class ProductsRepository {
       data: {
         title,
         description,
-        userId,
+        UserId: userId,
       },
     });
-
+    
     return createdProduct;
   };
 
-  updatePost = async (productId, title, description, status) => {
+  updateProduct = async (productId, title, description, status) => {
    
     const updatedProduct = await prisma.products.update({
       where: {
@@ -47,7 +57,7 @@ export class ProductsRepository {
     return updatedProduct;
   };
 
-  deletePost = async (postId) => {
+  deleteProduct = async (postId) => {
    
     const deletedProduct = await prisma.products.delete({
       where: {
