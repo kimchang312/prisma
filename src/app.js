@@ -4,7 +4,7 @@ import LogMiddleware from './middlewares/log.middleware.js';
 import ErrorHandlingMiddleware from './middlewares/error-handling.middleware.js';
 
 const app = express();
-const port = 4000;
+const port = 4001;
 
 app.use(LogMiddleware);
 app.use(express.json());
